@@ -1,0 +1,39 @@
+This file contains message digests of all files listed in MANIFEST,
+signed via the Module::Signature module, version 0.55.
+
+To verify the content in this distribution, first make sure you have
+Module::Signature installed, then type:
+
+    % cpansign -v
+
+It will check each file's integrity, as well as the signature's
+validity.  If "==> Signature verified OK! <==" is not displayed,
+the distribution may already have been compromised, and you should
+not run its Makefile.PL or Build.PL.
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+SHA1 9b1e6ccab9aae1f3abbc00a8bbc1a948c92d7dca COPYING
+SHA1 3f130a0e23220168947091ae0b18bdfef2540369 Changes
+SHA1 5add5551699de90841b0ad5778bc9ad49f3b871a MANIFEST
+SHA1 f6aafb59d1c051fde474599535891fc5e49bc31b MANIFEST.SKIP
+SHA1 d23dcdf580b7703e0e41366f9ac8bede5f302ef6 META.yml
+SHA1 c052a821173107cff999b53974782dd40df5d129 Makefile.PL
+SHA1 4761910f6e1d95d00a89008dff894a94fc77731a README
+SHA1 b810608c247c68111eb2d95d809116e7d6548c92 TODO
+SHA1 f5bb8fdddb19851f2634479ab80ff11d3b65014c lib/Net/ManageSieve.pm
+SHA1 47cf62666ae7ac838eafb2687c1bdf4adc220d7c managesieve-test-account.sample
+SHA1 e84b212ac2a465c56266c9bb2d3b1f8016ac4b21 t/00-signature.t
+SHA1 7d9d444e368c785d208df67d0f6c78e144ade868 t/Net-ManageSieve.t
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.6 (GNU/Linux)
+
+iQEVAwUBSEZH8KfIy+fTAIvYAQJcPAgAlLYR5NL+eGS81mVQJwJxE1RzJ4gbXSaC
+LtKGQfLDwSzVaq5LU3jRd0FKXf5vvLE4TDLVM75pR3osrEAZNZ6siaVKx3rdTf4Z
+jLG9H/ncnz4y8MRVGhXPYop2KkxSWI+3IbRBnCp+0CpzMWAfJ495TeVy05GcaayV
+I3MOYaceNBBHHj6pxwtkTgYNgJ+A7/yBKpMyVgtK6l3WyrGEn5n7QPzfVpx/XLL+
+qLDv4t6K36L6wrC4ylQhABH5p88iui17t95WmQDA32zrG1xnWBYioq7S33YPqDT3
+yJWbIR+AM21U0CAGAytxWClxOVMdrCZvKB2im8nOcTkE0hNdpHilaQ==
+=cRyj
+-----END PGP SIGNATURE-----

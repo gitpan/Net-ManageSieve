@@ -1,0 +1,13 @@
+Changes
+lib/Net/ManageSieve.pm
+Makefile.PL
+MANIFEST
+MANIFEST.SKIP
+t/00-signature.t
+t/Net-ManageSieve.t
+TODO
+COPYING
+README
+managesieve-test-account.sample
+META.yml                                 Module meta-data (added by MakeMaker)
+SIGNATURE                                Public-key signature (added by MakeMaker)

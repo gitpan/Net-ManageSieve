@@ -1,0 +1,6 @@
+host = localhost
+port = 2000
+#user = name
+#password = pwd
+#tls = require | yes/auto | no
+#debug = 1
