@@ -73,7 +73,7 @@ use Carp;
 use IO::Socket;
 use Encode;
 
-$VERSION = "0.03";
+$VERSION = "0.04";
 
 @ISA = qw();
 
@@ -261,6 +261,9 @@ authentification.
 The C<SSL_opts> is a HASH containing any options you can
 pass to L<IO::Socket::SSL->new()>. No one is passed by default.
 
+In order to detect in the later run, if the connection is encrypted,
+use the C<encrypted()> function.
+
 Return: $self or C<undef> on failure - the socket is still
 functioning, but is not encrypted.
 
@@ -297,6 +300,19 @@ sub starttls {
 	return $self;
 }
 
+=item encrypted ()
+
+Returns C<undef>, if the connection is not encrypted, otherwise
+C<true>.
+
+=cut
+
+sub encrypted {
+	my $fh = $_[0]->{fh};
+	return $fh && ref($fh) && $fh->isa('IO::Socket::SSL');
+}
+
+
 =item get_cipher (), dump_peer_certificate (), peer_certificate ($field)
 
 Returns C<undef>, if the connection is not encrypted, otherwise
@@ -311,7 +327,7 @@ sub _encrypted {
 		$_[0]->_set_error('No connection opened');
 		return undef;
 	}
-	unless(ref($fh) eq 'IO::Socket::SSL') {
+	unless(encrypted($_[0])) {
 		$_[0]->_set_error('Connection not encrypted');
 		return undef;
 	}

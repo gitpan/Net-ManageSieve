@@ -7,9 +7,9 @@ WriteMakefile(
     VERSION_FROM      => 'lib/Net/ManageSieve.pm', # finds $VERSION
     PREREQ_PM         => {
     	Socket => 1.3,
-    	Carp => 0.01,			# minimal version?
-    	IO::Socket => 0.01,		# minimal version?
-    	Encode => 0.01,			# minimal version?
+    	Carp => 0,			# minimal version?
+    	IO::Socket => 0,		# minimal version?
+    	Encode => 0,			# minimal version?
     }, # e.g., Module::Name => 1.1
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       (ABSTRACT_FROM  => 'lib/Net/ManageSieve.pm', # retrieve abstract from module

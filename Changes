@@ -1,5 +1,12 @@
 Revision history for Perl extension Net::ManageSieve.
 
-0.01  Tue Jun  3 10:54:16 2008
+0.04	Fri Jun  6 10:04:30 2008
+	- fix test: skip STARTTLS with proper explanation
+	 if TLS already started by new() because of tls setting in config file
+	- add: encrypted()
+	- fix test: skip almost everything for automated test scripts
+	 ignoring README
+
+0.03  Tue Jun  3 10:54:16 2008
 	- original version
 

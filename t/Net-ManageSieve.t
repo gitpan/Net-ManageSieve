@@ -8,6 +8,14 @@ use Test::More;
 plan tests => 18;
 use_ok('Net::ManageSieve');
 
+unless(-r dataf) {
+	SKIP: {
+		skip "Install host data file " . dataf . " as described in README", 17;
+	}
+	exit 0;
+}
+
+
 my %cfg = (
 );
 
@@ -54,8 +62,10 @@ unless(scalar keys %$cap) {
 }
 
 SKIP: {
+	skip "TLS already handled by new()", 2 if $srv->encrypted();
+	skip "TLS disabled in config file", 2
+	 if $cfg{tls} && $cfg{tls} =~ /^(?:disabled?|skip)$/i;
 	skip "No STARTTLS available from server", 2 unless $cap->{starttls};
-	skip "TLS already handled by new()", 2 if $cfg{tls};
 
 	ok($srv->starttls(), "Test STARTTLS");
 	ok($srv->get_cipher(), "Test get_cipher");
