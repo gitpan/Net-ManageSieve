@@ -9,5 +9,8 @@ TODO
 COPYING
 README
 managesieve-test-account.sample
+t/pod.t
+t/pod-coverage.t
+LICENSE
 META.yml                                 Module meta-data (added by MakeMaker)
 SIGNATURE                                Public-key signature (added by MakeMaker)

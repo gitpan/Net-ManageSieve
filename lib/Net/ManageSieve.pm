@@ -73,7 +73,7 @@ use Carp;
 use IO::Socket;
 use Encode;
 
-$VERSION = "0.04";
+$VERSION = "0.05";
 
 @ISA = qw();
 
@@ -259,7 +259,7 @@ Initiates a TLS session, may be used only before any
 authentification.
 
 The C<SSL_opts> is a HASH containing any options you can
-pass to L<IO::Socket::SSL->new()>. No one is passed by default.
+pass to L<< IO::Socket::SSL->new() >>. No one is passed by default.
 
 In order to detect in the later run, if the connection is encrypted,
 use the C<encrypted()> function.
@@ -669,7 +669,7 @@ sub deletescript {
 
 Returns the locally cached error information in the form:
 
- C<error description> respn=C<last server response>
+ error description respn=last server response
 
 =cut
 
@@ -1037,7 +1037,8 @@ sub deep_copy {
                 die "what type is $_?"
         }
 }
-=item C<<str2utf8([encoding,] string)>>
+
+=item C<< str2utf8([encoding,] string) >>
 
 Encodes the string into internal UTF8.
 

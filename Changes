@@ -1,5 +1,10 @@
 Revision history for Perl extension Net::ManageSieve.
 
+0.05	Tue Jun 10 17:08:11 2008
+	- add: t/pod.t & t/pod-coverage.t
+	- add: LICENSE
+	- fix: some POD errors in docu
+
 0.04	Fri Jun  6 10:04:30 2008
 	- fix test: skip STARTTLS with proper explanation
 	 if TLS already started by new() because of tls setting in config file
