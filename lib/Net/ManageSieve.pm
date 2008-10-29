@@ -73,7 +73,7 @@ use Carp;
 use IO::Socket;
 use Encode;
 
-$VERSION = "0.05";
+$VERSION = "0.06";
 
 @ISA = qw();
 
@@ -876,7 +876,7 @@ sub _response {
 
 	my $l = [];
 	GET_LOOP: {
-		my $r = $self->_token() or return undef;
+		defined(my $r = $self->_token()) or return undef;
 		push(@$l, $r);
 		redo GET_LOOP
 		 if !ref($r)		# string

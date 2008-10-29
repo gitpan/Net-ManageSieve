@@ -1,5 +1,9 @@
 Revision history for Perl extension Net::ManageSieve.
 
+0.06	Wed Oct 29 08:33:41 CET 2008
+	- fix: empty token is treated as error in _response()
+		CPAN bug #40456 Mario Domgoergen
+
 0.05	Tue Jun 10 17:08:11 2008
 	- add: t/pod.t & t/pod-coverage.t
 	- add: LICENSE
