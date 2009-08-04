@@ -115,7 +115,7 @@ use Carp;
 use IO::Socket;
 use Encode;
 
-$VERSION = "0.07";
+$VERSION = "0.08";
 
 @ISA = qw();
 
@@ -150,16 +150,18 @@ B<Port> - Select a port on the remote host to connect to (default is 2000)
 
 B<Debug> or B<debug> - enable debugging if true (default OFF)
 
+I<Note>: All of the above options are passed through to L<IO::Socket::INET>.
+
 B<tls> - issue STARTTLS right after connect. If B<tls> is a HASH ref,
 the mode is in member C<mode>, otherwise C<tls> itself is the mode and
 an empty SSL option HASH is passed to L<starttls()>. The C<mode> may be
 one of C<require> to fail, if TLS negotiation fails, or C<auto>,
 C<on> or C<yes>, if TLS is to attempt, but a failure is ignored.
-
-I<Note>: All of the above options are passed through to L<IO::Socket::INET>.
+(Aliases: B<TLS>, B<Tls>)
 
 B<on_fail> - Changes the error handling of all functions that would
 otherwise return undef and set C<$@>. See section ERROR HANDLING
+(Aliases: B<On_fail>)
 
 Example:
 
@@ -228,7 +230,8 @@ sub new {
 	$self->{_last_error} = '';
 	$self->{_last_command} = '';
 	$self->{_debug} = 1 if $arg{Debug} || $arg{debug};
-	$self->{_on_fail} = delete $arg{on_fail};
+	$self->{_on_fail} = delete $arg{on_fail} || delete $arg{On_fail};
+	$self->{_tls} = delete $arg{tls} || delete $arg{Tls} || delete $arg{TLS}; 
 
 	foreach my $h (@{ref($host) ? $host : [ $host ]}) {
 		$arg{PeerAddr} = $h;
@@ -252,7 +255,7 @@ sub new {
 	return undef unless $self->ok($cap);
 	$self->_decodeCap($cap);
 
-	if(my $mode = $arg{tls}) {
+	if(my $mode = $self->{_tls}) {
 		my $tls;	
 		if(ref($mode) eq 'HASH') {
 			$tls = $mode;
