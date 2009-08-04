@@ -62,6 +62,48 @@ This example lists all storred scripts on the server and requires TLS:
      , "\n";
     $sieve->logout;
 
+=head1 ERROR HANDLING
+
+By default all functions return C<undef> on failure and set an
+error description into C<$@>, which can be retrieved with the
+method C<error()> as well.
+
+The constructor accepts the setting C<on_fail>, which alters this
+behaviour by changing the step to assign C<$@>:
+If its value is:
+
+=over 4
+
+=item C<warn>
+
+the program carps the error description.
+
+If C<debug> is enabled, too, the description is printed twice.
+
+=item C<die>
+
+the program croaks.
+
+=item is a CODE ref
+
+this subroutine is called with the arguments:
+
+ &code_ref ( $object, $error_message )
+
+The return value controls, whether or not the error message will be
+assigned to C<$@>. Private functions may just signal that an error
+occured, but keep C<$@> unchanged. In this case C<$@> remains unchanged,
+if code_ref returns true.
+
+I<Note>: Even if the code ref returns false, C<$@> might bi clobberred
+by called modules. This is especially true in the C<new()> constructor.
+
+=item otherwise
+
+the default behaviour is retained by setting C<$@>.
+
+=back
+
 =cut
 
 require 5.001;
@@ -73,7 +115,7 @@ use Carp;
 use IO::Socket;
 use Encode;
 
-$VERSION = "0.06";
+$VERSION = "0.07";
 
 @ISA = qw();
 
@@ -114,7 +156,10 @@ an empty SSL option HASH is passed to L<starttls()>. The C<mode> may be
 one of C<require> to fail, if TLS negotiation fails, or C<auto>,
 C<on> or C<yes>, if TLS is to attempt, but a failure is ignored.
 
-I<Note>: All options are passed through to L<IO::Socket::INET>.
+I<Note>: All of the above options are passed through to L<IO::Socket::INET>.
+
+B<on_fail> - Changes the error handling of all functions that would
+otherwise return undef and set C<$@>. See section ERROR HANDLING
 
 Example:
 
@@ -183,6 +228,7 @@ sub new {
 	$self->{_last_error} = '';
 	$self->{_last_command} = '';
 	$self->{_debug} = 1 if $arg{Debug} || $arg{debug};
+	$self->{_on_fail} = delete $arg{on_fail};
 
 	foreach my $h (@{ref($host) ? $host : [ $host ]}) {
 		$arg{PeerAddr} = $h;
@@ -192,7 +238,12 @@ sub new {
 		}
 	}
 
-	return undef unless defined $self->{host};
+	unless(defined $self->{host}) {
+		my $err = $@;
+		$err = 'failed to connect to host(s): '.$! unless defined $err;
+		$self->_set_error($err);
+		return undef;
+	}
 
 	$self->{fh}->autoflush(1);
 
@@ -214,11 +265,8 @@ sub new {
 			my $rc = $self->starttls(%$tls);
 			if(!$rc && $mode eq 'require') {
 				my $err = $@;
-				unless($err) {
-					$self->_set_error('Failed to enable TLS');
-				} else {
-					$@ = $err;
-				}
+				$err = 'unknown error' unless defined $err;
+				$self->_set_error('failed to enable TLS: '.$err);
 				return undef;
 			}
 		}
@@ -230,10 +278,11 @@ sub new {
 =head1 METHODS
 
 Unless otherwise stated all methods return either a I<true> or I<false>
-value, with I<true> meaning that the operation was a success. When a method
-states that it returns a value, failure will be returned as I<undef> or an
-empty list. The error is specified in C<$@> and can be returned with the
-L</error> method.
+value, with I<true> meaning that the operation was a success. When
+a method states that it returns a value, failure will be returned as
+I<undef> or an empty list. The error is specified in C<$@> and can be
+returned with the L</error> method. Please see section ERROR HANDLING
+for an alternative error handling scheme.
 
 =over 4
 
@@ -281,9 +330,9 @@ sub starttls {
 
 	# Initiate TLS 
 	unless(defined &IO::Socket::SSL::new) {
-		eval " require IO::Socket::SSL ";
+		eval { require IO::Socket::SSL };
 		if($@) {
-			$self->_set_error('Cannot find module IO::Socket::SSL', 'skipAd');
+			$self->_set_error('cannot find module IO::Socket::SSL', 'skipAd');
 			return undef;
 		}
 	}
@@ -324,11 +373,11 @@ of L<IO::Socket::SSL>.
 sub _encrypted {
 	my $fh = $_[0]->{fh};
 	unless($fh) {
-		$_[0]->_set_error('No connection opened');
+		$_[0]->_set_error('no connection opened');
 		return undef;
 	}
 	unless(encrypted($_[0])) {
-		$_[0]->_set_error('Connection not encrypted');
+		$_[0]->_set_error('connection not encrypted');
 		return undef;
 	}
 	return $fh;
@@ -369,7 +418,7 @@ sub _encode_base64 {
 	unless(defined &MIME::Base64::encode_base64) {	# Automatically load it
 		eval { 	require MIME::Base64; };
 		if($@) {
-			$self->_set_error('Failed to load MIME::Base64: ' . $@);
+			$self->_set_error('failed to load MIME::Base64: ' . $@);
 			return undef;
 		}
 	}
@@ -388,7 +437,7 @@ sub auth {
 		unless(defined &Authen::SASL::new) {	# Automatically load it
 			eval { 	require Authen::SASL; };
 			if($@) {
-				$self->_set_error("Failed to load Authen::SASL: $@\nFallback to PLAIN\n");
+				$self->_set_error("failed to load Authen::SASL: $@\nFallback to PLAIN\n");
 				$doSASL = undef;
 			}
 		}
@@ -399,7 +448,7 @@ sub auth {
 #				$sasl->mechanism($mech);
 			} else {
 				unless(length $username) {
-					$self->_set_error("Need username or Authen::SASL object");
+					$self->_set_error("need username or Authen::SASL object");
 					return undef;
 				}
 				# for unknown reason to pass in a space
@@ -460,7 +509,7 @@ sub auth {
 				$self->_set_error('SASL authentification failed');
 				return undef;
 			}
-			$self->_set_error("Start of SASL failed");
+			$self->_set_error("start of SASL failed");
 			# Circumvent SASL problems by falling back to plain PLAIN
 		}
     }
@@ -682,8 +731,10 @@ sub error {
 
 =begin COMMENT
 
-arg1 :- error string
+arg1 :- error string, always != undef
 arg2 :- if passed, but not true: DO NOT assign $@
+
+See ERROR HANDLING about C<_on_fail>
 
 =end COMMENT
 
@@ -692,11 +743,19 @@ arg2 :- if passed, but not true: DO NOT assign $@
 sub _set_error {
 	my ($self, $err, $Ad) = @_;
 
-	if($err) {
-		dbgPrint('ERROR:', $err) if $self->{_debug};
-		$self->{_last_error} = $err;
-		$@ = $err if !defined $Ad || $Ad;
+	dbgPrint('ERROR:', $err) if $self->{_debug};
+	$self->{_last_error} = $err;
+	my $assignAd = !defined $Ad || $Ad;
+	my $op = $self->{_on_fail} if exists $self->{_on_fail};
+	if(defined($op) && ref($op) eq 'CODE') {
+		$assignAd &&= $op->($self, $err);
+	} elsif(defined($op) && $op eq 'warn') {
+		Carp::carp $err;
+	} elsif(defined($op) && $op eq 'die') {
+		Carp::croak $err."\n";
+	# } else {
 	}
+	$@ = $err if $assignAd;
 
 	return $self;
 }
@@ -778,7 +837,7 @@ sub _chkName {
 	}
 
 	if($name =~ /[\0\r\n]/) {
-		$self->_set_error("Invalid character in name");
+		$self->_set_error("invalid character in name");
 		return undef;
 	}
 
@@ -826,7 +885,7 @@ sub ok {
 	$cmt ||= $c;
 
 	unless($c =~ /\A(OK|NO|BYE)\b/i) {
-		$self->_set_error("Invalid response: $cmt");
+		$self->_set_error("invalid response: $cmt");
 		return undef;
 	}
 	return $c if uc($1) eq 'OK'
@@ -841,7 +900,7 @@ sub _write {
 
 	my $fh = $self->{fh};
 	unless($fh) {
-		$self->_set_error("No connection open");
+		$self->_set_error("no connection open");
 		return undef;
 	}
 
@@ -913,7 +972,7 @@ sub _getline {
 
 	my $fh = $self->{fh};
 	unless($fh) {
-		$self->_set_error("No connection open");
+		$self->_set_error("no connection open");
 		return undef;
 	}
 
@@ -984,7 +1043,7 @@ sub _token {
 		# so that a quoted string must not cross line boundaries
 		# that makes parsing easier
 		unless($l =~ s/\A((?:[^"\\]|\\.)*)"//) {
-			$self->_set_error("Missing final quote on line: $l");
+			$self->_set_error("missing final quote on line: $l");
 			return undef;
 		}
 		$self->_unget($l);
@@ -1013,7 +1072,7 @@ sub _token {
 		$self->_unget($l) if $l;
 		$l = [ "\n", $1 ];
 	} else {
-		$self->_set_error("Invalid token: $l");
+		$self->_set_error("invalid token: $l");
 		return undef;
 	}
 

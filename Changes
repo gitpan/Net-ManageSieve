@@ -1,5 +1,10 @@
 Revision history for Perl extension Net::ManageSieve.
 
+0.07	Tue Aug  4 13:56:26 CEST 2009
+	- add: on_fail option for constructor
+		CPAN bug #48286 Mario Domgoergen
+	- fix: missing call to _set_error() when TLS fails
+
 0.06	Wed Oct 29 08:33:41 CET 2008
 	- fix: empty token is treated as error in _response()
 		CPAN bug #40456 Mario Domgoergen
