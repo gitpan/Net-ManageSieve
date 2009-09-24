@@ -115,7 +115,7 @@ use Carp;
 use IO::Socket;
 use Encode;
 
-$VERSION = "0.08";
+$VERSION = "0.09";
 
 @ISA = qw();
 
@@ -517,7 +517,9 @@ sub auth {
 		}
     }
 
-	my $r = $self->_encode_base64(join("\0", ($username, $username, $password)));
+	my $r = $self->_encode_base64(
+	  join("\0", ($username, $username, $password))
+	  , '');
 	return undef unless defined $r;
 	return $self->ok($self->_command('Authenticate "PLAIN" "'.$r.'"'));
 }
