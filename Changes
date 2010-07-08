@@ -1,5 +1,20 @@
 Revision history for Perl extension Net::ManageSieve.
 
+0.10	Fri Jul  8 15:45:42 CEST 2010
+	- fix: authentificate against Cyrus CPAN bug #58192 Rudy Gevaert
+		You can pass different user and authname to auth() now
+	- fix: added missed entry in Changes of v0.09
+	- fix: stall in select() CPAN bug #58235 Rudy Gevaert
+		When the SSL layer buffers data, select() does not return
+		true, hence, is not indicating that pending data. It seems
+		that select() queries the TCP stack only.
+		The now choosen maximal size in sysread() is larger than
+		the block size of Net::SSLeay at the current time of 32KB.
+
+0.09	Thu Sep 24 14:29:07 CEST 2009
+	- fix: CPAN bug#49333: bug in Mangesieve by Oliver Eales
+		base64 encoded password in fallback branch contains line feeds
+
 0.08	Tue Aug  4 13:56:26 CEST 2009
 	- chg: accept ucfirst options on new() constructor for all options
 		CPAN bug #48349 MDOM

@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               Net-ManageSieve
-version:            0.09
+version:            0.10
 abstract:           ManageSieve Protocol Client
 author:
     - Steffen Kaiser <cpan@skaus.info>

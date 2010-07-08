@@ -115,7 +115,7 @@ use Carp;
 use IO::Socket;
 use Encode;
 
-$VERSION = "0.09";
+$VERSION = "0.10";
 
 @ISA = qw();
 
@@ -400,13 +400,17 @@ sub peer_certificate {
 	return $_[0]->{fh}->peer_certificate(@_);
 }
 
-=item auth (USER [, PASSWORD ])
+=item auth (USER [, PASSWORD [, AUTHNAME ] ])
 
 Authentificates as C<USER>.
 
-If the module L<Authen::SASL> is available, this module is tried first. In this
-case, the C<USER> paramter may be a C<Authen::SASL> object, that is not furtherly
-modified, C<PASSWORD> is ignored in this case.
+If the module L<Authen::SASL> is available, this module is tried first. In
+this case, the C<USER> paramter may be a C<Authen::SASL> object, that
+is not furtherly modified. If C<USER> is no C<Authen::SASL> object, 
+C<USER> is passed as C<user>, C<PASSWORD> as C<pass> and C<AUTHNAME>
+as C<authname> to C<< Authen::SASL->new() >>. If C<AUTHNAME> is
+undefined, C<USER> is passed as C<authname>. This way you can
+authentificate against Cyrus: C<auth('cyrus', $password, $username)>.
 
 If L<Authen::SASL> is I<not> available or the initialization of it fails,
 this function attempts to authentificate via the C<PLAIN> method.
@@ -431,8 +435,7 @@ sub _encode_base64 {
 	return $r;
 }
 sub auth {
-    my ($self, $username, $password) = @_;
-
+	my ($self, $username, $password, $authname) = @_;
     
     if(my $mech = $self->{capabilities}{sasl}) {
      # If the server does not announce SASL, we try PLAIN anyway
@@ -454,6 +457,9 @@ sub auth {
 					$self->_set_error("need username or Authen::SASL object");
 					return undef;
 				}
+				unless(defined $authname) {
+					$authname = $username;
+				}
 				# for unknown reason to pass in a space
 				# separated string leads to the problem
 				# that $client->mechnism returns the same
@@ -466,8 +472,8 @@ sub auth {
 				$sasl = Authen::SASL->new(mechanism=> "".$mech, # without "". the behaviour is funny
 					callback => { user => $username,
 						pass => $password,
-						password => $password,
-						authname => $username,
+						password => $password,	# needed it to work properly
+						authname => $authname,
 					}
 				);
 			}
@@ -989,7 +995,7 @@ sub _getline {
 
 	until(scalar(@{$self->{line_buffer}})) {
 		if(select($out, undef, undef, $timeout)) {
-			unless(sysread($fh, $buf, 2048, length($buf))) {
+			unless(sysread($fh, $buf, 64 * 1024, length($buf))) {
 				$self->_set_error("socket empty although there is data pending: $!");
 				$self->close();
 				return undef;
@@ -1215,7 +1221,7 @@ This module heavily bases on L<Net::SMTP> and L<Net::Cmd>.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2008 Steffen Kaiser. All rights reserved.
+Copyright (c) 2008-2010 Steffen Kaiser. All rights reserved.
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
