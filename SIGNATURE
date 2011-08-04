@@ -1,5 +1,5 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.55.
+signed via the Module::Signature module, version 0.63.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
@@ -15,28 +15,28 @@ not run its Makefile.PL or Build.PL.
 Hash: SHA1
 
 SHA1 9b1e6ccab9aae1f3abbc00a8bbc1a948c92d7dca COPYING
-SHA1 aad08c12fbe75345acba882df3722ed68c318d30 Changes
+SHA1 87ab2601fc4f9b6a0cc65c27c31ff32462f20ae1 Changes
 SHA1 dcaa0c0dc2cbd898152fb57a8b3e1747fd857504 LICENSE
 SHA1 a2e4e1d7b15aa75d31c28d4dd3721deaacf5215d MANIFEST
 SHA1 f6aafb59d1c051fde474599535891fc5e49bc31b MANIFEST.SKIP
-SHA1 db533235844457c2dd1382c9e133f45bed0428ce META.yml
+SHA1 8c6d4fb3acd76456e202dfadfcf3f51e93b32c9c META.yml
 SHA1 60083cedbf92adea30b31c96c1fa07005f5ca52f Makefile.PL
 SHA1 4761910f6e1d95d00a89008dff894a94fc77731a README
-SHA1 b810608c247c68111eb2d95d809116e7d6548c92 TODO
-SHA1 7080c2547c9d4052b4baeef31cb37b34565dfb38 lib/Net/ManageSieve.pm
+SHA1 ab523688ffd8894469769ea7bcee7298d94a9d24 TODO
+SHA1 451bc34c881d02926cff0a0ce6f44da91a436df9 lib/Net/ManageSieve.pm
 SHA1 e1fd5931b8c313a295550da26b7914f4fd4c05bc managesieve-test-account.sample
 SHA1 e84b212ac2a465c56266c9bb2d3b1f8016ac4b21 t/00-signature.t
 SHA1 4bd8d2b8ee556deb6c6151bf7108c731e8004919 t/Net-ManageSieve.t
 SHA1 96b7b9b9698b272e12bac8c38d1305a29627d541 t/pod-coverage.t
 SHA1 e9c6a5881fc60173fbc8d479c1afd2ce3b43bef1 t/pod.t
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.6 (GNU/Linux)
+Version: GnuPG v1.4.10 (GNU/Linux)
 
-iQEVAwUBTDXWzDLh+Gx9F1xpAQKYWAf+JttkzbolMIVZXoU+pYWYbuVb/b9/tE7f
-/XZKejlaZ+Xo0c7nQMvlpZbksHSb3PUEiNIPqhAuhhThMc6r50gBB7kzfHFuhquY
-YIcsiEyI0TkuKWHj+zUTssnwSjbUF4pTFMu1wDhqfgBue/U8YVX92V1tEsgU/IjN
-C5St703XGgzZnvj7nIhXyFbZ6RrX6WH0y6YMdVa0LrxHdP8zhvIKCTD6aXuNS3xN
-/JkwMX4WA5l5/FPoXk49Ly4Ez/VzBtuCXIKz7g7464wcRJVvs65gx0WNrslB3Km1
-1tbQ89+bmmggDLMRjEO1ndE5zwkilTErd40Xves5nb7iaSKa4ZqEjQ==
-=3gmT
+iQEVAwUBTjqr2TLh+Gx9F1xpAQKD6Af/aapPdNE8RdSxS/aFIui2wNyH7F1Fd6bX
+yFUAgJ+Shy224X63ysuEOlqfYqJREr24bkn32/Ea8qWP8Kf4HQdeqnjQX4ugpksZ
+vCdsUOzmy48sdMVTqPrP5b4EuoC+NUrB7rEscgpnxx8mxn7CtYBe/6BPeqXqBass
+erhnQ66T2fmDYF0z9BEDshdVDK/cvlbsFB8QQWR366PVY/+a1l0FSTci1Pt0bXS1
+VL3QrFCjVOWUflqJpXF+Qrk9Rwzcwq/SAUmH+o1GRyucaAQLjqhGn/PIk+N/T8Jv
+d7/B5g+82MbzQbAMHGT2Tx1OU56LptuovTRFSpc8kC+nJSf9RLG3MQ==
+=P3dz
 -----END PGP SIGNATURE-----

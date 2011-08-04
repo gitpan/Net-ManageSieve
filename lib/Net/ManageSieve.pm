@@ -115,7 +115,7 @@ use Carp;
 use IO::Socket;
 use Encode;
 
-$VERSION = "0.10";
+$VERSION = "0.11";
 
 @ISA = qw();
 
@@ -308,7 +308,7 @@ sub close {
 =item starttls ( %SSL_opts )
 
 Initiates a TLS session, may be used only before any
-authentification.
+authentication.
 
 The C<SSL_opts> is a HASH containing any options you can
 pass to L<< IO::Socket::SSL->new() >>. No one is passed by default.
@@ -405,7 +405,7 @@ sub peer_certificate {
 Authentificates as C<USER>.
 
 If the module L<Authen::SASL> is available, this module is tried first. In
-this case, the C<USER> paramter may be a C<Authen::SASL> object, that
+this case, the C<USER> parameter may be a C<Authen::SASL> object, that
 is not furtherly modified. If C<USER> is no C<Authen::SASL> object, 
 C<USER> is passed as C<user>, C<PASSWORD> as C<pass> and C<AUTHNAME>
 as C<authname> to C<< Authen::SASL->new() >>. If C<AUTHNAME> is
@@ -566,7 +566,7 @@ sub host {
 
 =item capabilities ([reget])
 
-Returns the capabilites as HASH ref, e.g.:
+Returns the capabilities as HASH ref, e.g.:
 
 	{
 	  'starttls' => 1,

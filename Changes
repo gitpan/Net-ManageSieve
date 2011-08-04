@@ -1,5 +1,9 @@
 Revision history for Perl extension Net::ManageSieve.
 
+0.11	Fri Jul  8 15:45:42 CEST 2010
+	-fix: spelling CPAN bug #59225 Ansgar Burchardt
+	-fix: META.yml CPAN bug #62606 ANDK
+
 0.10	Fri Jul  8 15:45:42 CEST 2010
 	- fix: authentificate against Cyrus CPAN bug #58192 Rudy Gevaert
 		You can pass different user and authname to auth() now

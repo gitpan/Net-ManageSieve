@@ -1,5 +1,5 @@
 What's ToDO?
 
-+ Test SASL Auth with other mechanisms that PLAIN and LOGIN.
++ Test SASL Auth with other mechanisms than PLAIN and LOGIN.
 
 + Make a better test case.
