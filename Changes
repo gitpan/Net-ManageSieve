@@ -1,5 +1,9 @@
 Revision history for Perl extension Net::ManageSieve.
 
+0.12	Thu Jan 12 16:22:42 CEST 2012
+	-fix: remove signature check causing too many failures of
+		automatic checks
+
 0.11	Fri Jul  8 15:45:42 CEST 2010
 	-fix: spelling CPAN bug #59225 Ansgar Burchardt
 	-fix: META.yml CPAN bug #62606 ANDK

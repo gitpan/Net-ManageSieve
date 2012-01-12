@@ -3,7 +3,6 @@ lib/Net/ManageSieve.pm
 Makefile.PL
 MANIFEST
 MANIFEST.SKIP
-t/00-signature.t
 t/Net-ManageSieve.t
 TODO
 COPYING
